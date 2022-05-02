@@ -11,18 +11,21 @@ const { Node } = require('../extensions/list-tree.js');
 class BinarySearchTree {
   
   constructor(){
+
     this.rootNode = null;
   }
 
 
   root() {
+    
     return this.rootNode;
   }
 
   add(data) {
-	  this.rootNode = addWithin(this.rootNode, data);
 
-	  function addWithin(node, data) {
+	  this.rootNode = addNode(this.rootNode, data);
+
+	  function addNode(node, data) {
 		  if (!node) {
 			  return new Node(data);
 		  }
@@ -32,9 +35,9 @@ class BinarySearchTree {
 		  }
 
 		  if (data < node.data) {
-			  node.left = addWithin(node.left, data);
+			  node.left = addNode(node.left, data);
 		  } else {
-			  node.right = addWithin(node.right, data);
+			  node.right = addNode(node.right, data);
 		  }
 
 		  return node;
@@ -42,9 +45,10 @@ class BinarySearchTree {
 	}
 
   has(data) {
-    return searchWithin(this.rootNode, data);
 
-    function searchWithin(node, data) {
+    return Search(this.rootNode, data);
+
+    function Search(node, data) {
       if (!node) {
         return false;
       }
@@ -54,17 +58,29 @@ class BinarySearchTree {
       }
 
       return data < node.data ?
-      searchWithin(node.left, data) :
-      searchWithin(node.right, data);
+      Search(node.left, data) :
+      Search(node.right, data);
     }
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+
+    let node = this.rootNode;
+
+    while (node !== null) {
+      if (data === node.data) {
+        return node;
+      } else if (data < node.data) {
+        node = node.left;
+      } else {
+        node = node.right;
+      }
+    }
+    return null;
   }
 
   remove(data) {
+
     this.rootNode = removeNode(this.rootNode, data);
 
     function removeNode(node, data) {
@@ -107,6 +123,7 @@ class BinarySearchTree {
   }
 
   min() {
+
     if (!this.rootNode) {
       return;
     }
@@ -120,6 +137,7 @@ class BinarySearchTree {
   }
 
   max() {
+
     if (!this.rootNode) {
       return;
     }
@@ -132,17 +150,7 @@ class BinarySearchTree {
     return node.data;
   }
 
-  leftTraverse(cb) {
-    doLeft(this.rootNode, cb);
-
-    function doLeft(node, cb) {
-      if (node) {
-        doLeft(node.left, cb);
-        cb(node.data);
-        doLeft(node.right, cb);          
-      }
-    }
-  }
+  
 }
 
 module.exports = {
